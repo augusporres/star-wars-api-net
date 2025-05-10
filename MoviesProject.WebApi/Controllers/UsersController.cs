@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MoviesProject.WebApi.Dtos;
 using MoviesProject.WebApi.Dtos.Users;
 
 namespace MoviesProject.WebApi.Controllers;

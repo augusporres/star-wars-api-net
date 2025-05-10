@@ -1,21 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MoviesProject.Commons.Features.Queries.GetAllMovies;
 using MoviesProject.WebApi.Dtos.Movies;
 
 namespace MoviesProject.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MoviesController : ControllerBase
+public class MoviesController(IMediator mediator) : ControllerBase
 {
+    private readonly IMediator _Mediator = mediator;
+
     [HttpGet]
     public async Task<IActionResult> GetAllMoviesAsync()
     {
-        // var query = new GetAllMoviesQuery();
-        // var result = await _Mediator.Send(query);
+        var query = new GetAllMoviesQuery();
+        var result = await _Mediator.Send(query);
         // if (result.IsSuccess)
         // {
         //     return Ok(result.Value);
@@ -64,7 +64,7 @@ public class MoviesController : ControllerBase
         // }
         return NotFound();
     }
-    [HttpGet("sync")]
+    [HttpPost("sync")]
     public async Task<IActionResult> SyncMoviesFromApiAsync()
     {
         // var result = await _Mediator.Send(command);

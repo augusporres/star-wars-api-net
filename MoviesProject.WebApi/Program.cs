@@ -6,6 +6,7 @@ using MoviesProject.Commons.Database;
 using MoviesProject.Commons.Models;
 using Swashbuckle.AspNetCore.Filters;
 using MoviesProject.WebApi.Extensions;
+using MoviesProject.Commons.ServiceExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,11 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MoviesProject API", Version = "v1" });
 });
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+
+builder.Services.FillSettings(builder.Configuration);
+
+builder.Services.AddProxies();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(MoviesProject.Commons.AssemblyReference.Assembly));
 builder.Configuration.AddUserSecrets<Program>();
 
 var connectionString = builder.Configuration.GetConnectionString("MainConnection");
