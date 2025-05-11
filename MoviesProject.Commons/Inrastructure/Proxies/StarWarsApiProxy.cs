@@ -4,6 +4,8 @@ using Microsoft.Extensions.Http;
 using MoviesProject.Commons.Inrastructure.Proxies.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Bogus;
 
 namespace MoviesProject.Commons.Inrastructure.Proxies;
 
@@ -19,15 +21,39 @@ public class StarWarsApiProxy(
 
     public async Task<GetAllMoviesResponseNetworkEntity> GetAllMoviesAsync()
     {
-        var httpClient = _HttpClientFactory.CreateClient();
+        var filmFaker = new Faker<MovieNetworEntity>()
+            .RuleFor(x => x.Title, f => f.Lorem.Sentence())
+            .RuleFor(x => x.Episode, f => f.Random.Int(1, 6))
+            .RuleFor(x => x.OpenningCrawl, f => f.Lorem.Paragraphs(3))
+            .RuleFor(x => x.Director, f => f.Name.FullName())
+            .RuleFor(x => x.Producer, f => f.Name.FullName());
+
+        var movies = Enumerable.Range(1, 6)
+            .Select(episode => filmFaker.Clone()
+            .RuleFor(x => x.Episode, _ => episode)
+            .Generate())
+            .ToList();
+
+        return new GetAllMoviesResponseNetworkEntity
+        {
+            Count = movies.Count,
+            Movies = movies
+        };
+
+        // var httpClient = _HttpClientFactory.CreateClient();
         // httpClient.BaseAddress = new Uri(_StarWarsApiProxySettings.BaseUrl);
-        var response = await httpClient.GetAsync("https://mx-leal-webapi.bistrosoft.com/api/v1/check");
-
-
-        var content = await response.Content.ReadAsStringAsync();
-        _Logger.LogInformation("Response from StarWarsApi: {Content}", content);
-        var result = System.Text.Json.JsonSerializer.Deserialize<GetAllMoviesResponseNetworkEntity>(content);
-        return result;
-
+        // var response = await httpClient.GetAsync(_StarWarsApiProxySettings.GetAllFilmsUrl);
+        // if (response.IsSuccessStatusCode)
+        // {
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     _Logger.LogInformation($"Response from StarWarsApi: {content}");
+        //     var result = JsonSerializer.Deserialize<GetAllMoviesResponseNetworkEntity>(content);
+        //     return result;
+        // }
+        // else
+        // {
+        //     _Logger.LogError($"Error while calling StarWarsApi: {response.StatusCode}");
+        //     throw new Exception($"Error while calling StarWarsApi: {response.StatusCode}");
+        // }
     }
 }

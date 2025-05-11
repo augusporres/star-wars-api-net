@@ -32,5 +32,13 @@ public class MovieConfiguration : IEntityTypeConfiguration<Movie>
             .Property(m => m.UpdatedAt)
             .HasDefaultValueSql("now()");
 
+        builder
+            .Property(m => m.Director)
+            .HasMaxLength(255);
+
+        builder
+            .Property(m => m.Producer)
+            .HasMaxLength(255);
+
     }
 }

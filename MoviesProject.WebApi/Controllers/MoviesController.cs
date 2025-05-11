@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MoviesProject.Commons.Features.Queries.GetAllMovies;
+using MoviesProject.Commons.Features.Queries.GetMovieDetails;
 using MoviesProject.WebApi.Dtos.Movies;
 
 namespace MoviesProject.WebApi.Controllers;
@@ -16,22 +17,22 @@ public class MoviesController(IMediator mediator) : ControllerBase
     {
         var query = new GetAllMoviesQuery();
         var result = await _Mediator.Send(query);
-        // if (result.IsSuccess)
-        // {
-        //     return Ok(result.Value);
-        // }
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
         return NotFound();
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMovieDetailsByIdAsync(int id)
     {
-        // var query = new GetMovieDetailsByIdQuery(id);
-        // var result = await _Mediator.Send(query);
-        // if (result.IsSuccess)
-        // {
-        //     return Ok(result.Value);
-        // }
+        var query = new GetMovieDetailsByIdQuery(id);
+        var result = await _Mediator.Send(query);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
         return NotFound();
     }
     [HttpPost]

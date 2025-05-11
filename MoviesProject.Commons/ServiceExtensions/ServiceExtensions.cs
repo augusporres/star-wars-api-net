@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MoviesProject.Commons.Database.Repositories;
+using MoviesProject.Commons.Database.Repositories.Interfaces;
 using MoviesProject.Commons.Inrastructure.Proxies;
 using MoviesProject.Commons.Inrastructure.Proxies.Interfaces;
 using MoviesProject.Commons.Inrastructure.Proxies.Settings;
@@ -23,5 +25,10 @@ public static class ServiceExtensions
     {
         services.AddHttpClient();
         services.AddScoped<IStarWarsApiProxy, StarWarsApiProxy>();
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IMovieRepository, MovieRepository>();
     }
 }

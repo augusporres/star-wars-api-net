@@ -5,7 +5,8 @@ namespace MoviesProject.Commons.Inrastructure.Proxies.Models;
 public class GetAllMoviesResponseNetworkEntity
 {
     public int Count { get; set; }
-    public List<MovieNetworEntity>? Results { get; set; }
+    [JsonPropertyName("results")]
+    public List<MovieNetworEntity>? Movies { get; set; }
 }
 
 public class MovieNetworEntity

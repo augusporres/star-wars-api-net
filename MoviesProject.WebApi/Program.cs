@@ -24,8 +24,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
 builder.Services.FillSettings(builder.Configuration);
-
+builder.Services.AddRepositories();
 builder.Services.AddProxies();
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(MoviesProject.Commons.AssemblyReference.Assembly));
 builder.Configuration.AddUserSecrets<Program>();
 
