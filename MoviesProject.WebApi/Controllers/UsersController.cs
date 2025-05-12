@@ -38,7 +38,14 @@ public class UsersController(
         return BadRequest(result.Error);
     }
 
+    /// <summary>
+    /// Endpoint para iniciar sesión
+    /// </summary>
+    /// <param name="userLoginDto"></param>
+    /// <returns></returns>
     [HttpPost("login")]
+    [Produces("application/json")]
+    [SwaggerResponse(StatusCodes.Status200OK, "Inicio de sesión exitoso")]
     public async Task<IActionResult> LoginAsync([FromBody] UserLoginDto userLoginDto)
     {
 
