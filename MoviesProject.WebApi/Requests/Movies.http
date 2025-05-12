@@ -1,0 +1,3 @@
+@host=http://localhost:5076
+
+GET {{host}}/api/movies

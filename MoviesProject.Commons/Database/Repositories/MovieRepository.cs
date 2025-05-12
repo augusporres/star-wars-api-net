@@ -15,6 +15,12 @@ public class MovieRepository(ApplicationDbContext context) : IMovieRepository
         return movie.Id;
     }
 
+    public async Task AddMoviesAsync(List<Movie> movies)
+    {
+        _context.Movies.AddRange(movies);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task DeleteMovieAsync(Movie movie)
     {
         _context.Movies.Remove(movie);
@@ -36,5 +42,11 @@ public class MovieRepository(ApplicationDbContext context) : IMovieRepository
         movie.UpdatedAt = DateTime.UtcNow;
         _context.Movies.Update(movie);
         return await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateMoviesAsync(List<Movie> movies)
+    {
+        _context.Movies.UpdateRange(movies);
+        await _context.SaveChangesAsync();
     }
 }

@@ -31,4 +31,5 @@ public static class ServiceExtensions
     {
         services.AddScoped<IMovieRepository, MovieRepository>();
     }
+
 }
