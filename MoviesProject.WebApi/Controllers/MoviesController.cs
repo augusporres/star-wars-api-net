@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MoviesProject.Commons.Features.Commands.CreateMovie;
@@ -31,7 +32,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [Authorize(Roles = "User")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin,User")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<Movie>), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetAllMoviesSucessResponseExample))]
@@ -55,7 +56,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// <param name="id">Id de la película. <b>Ejemplo: 1</b></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    [Authorize(Roles = "User")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin,User")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GetMovieByIdSuccessResponseExample))]
@@ -78,7 +79,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// <param name="createMovieDto"></param>
     /// <returns></returns>
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status201Created)]
     [SwaggerRequestExample(typeof(CreateMovieDto), typeof(CreateMovieRequestExample))]
@@ -107,7 +108,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// <param name="updateMovieDto"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Produces("application/json")]
     [SwaggerRequestExample(typeof(UpdateMovieDto), typeof(UpdateMovieRequestExample))]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status200OK)]
@@ -136,7 +137,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// <param name="id">Id de la película. <b>Ejemplo: 1</b></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(Movie), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DeleteMovieSuccessResponseExample))]
@@ -158,7 +159,7 @@ public class MoviesController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpPost("sync")]
-    [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(SyncMoviesCommandResponse), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(SyncMoviesSuccessResponseExample))]

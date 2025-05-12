@@ -1,3 +1,19 @@
 @host=http://localhost:5076
 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjI5OTkyMzg2LTllMWUtNDQ4ZS1hNjg0LTczMTZiMzUxMTk2NCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhZG1pbiIsImp0aSI6ImQzZGI4Nzk3LThjYjAtNDRkZS05YWU0LWFkZDkyZTVhZTYxMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzQ3MDcwMDA2LCJpc3MiOiJNb3ZpZXNQcm9qZWN0QVBJIiwiYXVkIjoiTW92aWVzUHJvamVjdENsaWVudCJ9.Tp6iiqLYXVyf6jP6gVHmNiXlajbXen_QotLbQvhWG3A
 GET {{host}}/api/movies
+Authorization: Bearer {{token}}
+
+
+###
+DELETE {{host}}/api/movies/3
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/api/Users/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "Admin123!"
+}

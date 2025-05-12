@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MoviesProject.Commons.Features.Commands.Login;
 using MoviesProject.Commons.Features.Commands.RegisterUser;
 using MoviesProject.WebApi.Dtos.Users;
 using MoviesProject.WebApi.Examples.RegisterUser;
@@ -40,12 +41,13 @@ public class UsersController(
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync([FromBody] UserLoginDto userLoginDto)
     {
-        return Ok();
-        // var command = new LoginUserCommand(userLoginDto);
-        // var result = await _Mediator.Send(command);
-        // if (result.IsSuccess)
-        // {
-        //     return Ok(new UserLoginResponse());
-        // }
+
+        var command = new LoginCommand(userLoginDto.Username, userLoginDto.Password);
+        var result = await _Mediator.Send(command);
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+        return BadRequest(result.Error);
     }
 }
