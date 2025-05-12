@@ -5,7 +5,7 @@ namespace MoviesProject.Commons.Features.Commands.UpdateMovie;
 
 [AuditLog]
 public sealed record UpdateMovieCommand(
-    int id,
+    int Id,
     string Title,
     int EpisodeId,
     string OpenningCrawl,

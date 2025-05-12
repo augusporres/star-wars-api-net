@@ -7,35 +7,46 @@ using System.IdentityModel.Tokens.Jwt;
 using MoviesProject.Commons.Abstractions;
 using MoviesProject.Commons.Models;
 using MoviesProject.Commons.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace MoviesProject.Commons.Features.Commands.Login;
 
 public class LoginCommandHandler(
     UserManager<User> userManager,
     SignInManager<User> signInManager,
-    IConfiguration configuration
+    IConfiguration configuration,
+    ILogger<LoginCommandHandler> logger
 ) : ICommandHandler<LoginCommand, LoginCommandResponse>
 {
     private readonly UserManager<User> _UserManager = userManager;
     private readonly SignInManager<User> _SignInManager = signInManager;
     private readonly IConfiguration _Configuration = configuration;
+    private readonly ILogger<LoginCommandHandler> _Logger = logger;
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _UserManager.FindByNameAsync(request.Username);
-        if (user == null)
+        try
         {
-            return Result<LoginCommandResponse>.Failure("Usuario no encontrado");
+            var user = await _UserManager.FindByNameAsync(request.Username);
+            if (user == null)
+            {
+                return Result<LoginCommandResponse>.Failure("Usuario no encontrado");
+            }
+            var result = await _SignInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+            if (!result.Succeeded)
+            {
+                return Result<LoginCommandResponse>.Failure("Contraseña incorrecta");
+            }
+
+            var roles = await _UserManager.GetRolesAsync(user);
+            var token = GenerateJwtToken(user, roles);
+
+            return Result<LoginCommandResponse>.Success(new LoginCommandResponse(token, request.Username, roles.ToList()));
         }
-        var result = await _SignInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
-        if (!result.Succeeded)
+        catch (Exception ex)
         {
-            return Result<LoginCommandResponse>.Failure("Contraseña incorrecta");
+            _Logger.LogError($"Error al procesar la solicitud de inicio de sesión -> {ex}");
+            return Result<LoginCommandResponse>.Failure("Error al procesar la solicitud de inicio de sesión");
         }
-
-        var roles = await _UserManager.GetRolesAsync(user);
-        var token = GenerateJwtToken(user, roles);
-
-        return Result<LoginCommandResponse>.Success(new LoginCommandResponse(token, request.Username, roles.ToList()));
     }
 
     private string GenerateJwtToken(User user, IList<string> roles)

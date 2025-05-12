@@ -19,6 +19,12 @@ public sealed class CreateMovieCommandHandler(
     {
         try
         {
+            var moviesInDb = await _movieRepository.GetAllMoviesAsync();
+            var movieInDb = moviesInDb.FirstOrDefault(m => m.Title == request.Title);
+            if (movieInDb != null)
+            {
+                return Result<CreateMovieCommandResponse>.Failure("Movie already exists");
+            }
             var movie = new Movie
             {
                 Title = request.Title,

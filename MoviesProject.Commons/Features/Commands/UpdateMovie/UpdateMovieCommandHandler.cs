@@ -11,7 +11,7 @@ public sealed class UpdateMovieCommandHandler(
     private readonly IMovieRepository _MovieRepository = movieRepository;
     public async Task<Result<UpdateMovieCommandResponse>> Handle(UpdateMovieCommand request, CancellationToken cancellationToken)
     {
-        var movie = await _MovieRepository.GetMovieByIdAsync(request.id);
+        var movie = await _MovieRepository.GetMovieByIdAsync(request.Id);
         if (movie is null)
         {
             return Result<UpdateMovieCommandResponse>.Failure("Movie not found");
