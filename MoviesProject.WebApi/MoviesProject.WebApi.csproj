@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>    
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-Movies.WebApi</UserSecretsId>
+    <UserSecretsId>dotnet-Movies.WebApi.Prod</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>1591</NoWarn> <!-- Disable warnings for missing XML comments -->
   </PropertyGroup>

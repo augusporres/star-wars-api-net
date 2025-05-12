@@ -13,7 +13,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Applicatio
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
-            .AddUserSecrets("dotnet-Movies.WebApi")
+            .AddUserSecrets("dotnet-Movies.WebApi.Prod")
             .Build();
 
         var connectionString = configuration.GetConnectionString("MainConnection");

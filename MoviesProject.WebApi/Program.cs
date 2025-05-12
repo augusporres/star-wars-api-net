@@ -89,7 +89,16 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuditLogBehaviour<,>));
-builder.Configuration.AddUserSecrets<Program>();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets("dotnet-Movies.WebApi");
+}
+else
+{
+    builder.Configuration.AddUserSecrets("dotnet-Movies.WebApi.Prod");
+}
+
 builder.Services.AddWebApiVersioning();
 
 var connectionString = builder.Configuration.GetConnectionString("MainConnection");
